@@ -5,29 +5,28 @@ var http = require('http');
 var async = require('async');
 var mysql = require("mysql");
 
-var locatr = require("./locatr");
-
-
 var config = require('./config.js');
+var utils = require('./util.js');
+
+var toolHandlers = [require('./loc_loader.js').handleRequest]
 
 function handleRequest(request, response){
     "use strict";
-    
+    var handled = false;
     var respStr = "";
     var url = request.url;
     console.log("requested: " + url);
-    response.writeHead(200, {'Content-Type': 'application/javascript'});
-    console.log(url.substring(1,8));
-    if (url.substring(1,8) == "locater"){
-        respStr += 'document.write("locater")';
-    } else {
-        respStr += 'document.write("not")';
+    
+    var requestContext = {request : request, response : response, url : url};
+    for (var i = 0; i < toolHandlers.length; i++) {
+       if (toolHandlers[i](requestContext)){
+           handled = true;
+           break;
+       }
     }
-    
-    response.end(respStr);
-    
-    
-    
+    if (!handled){
+        utils.returnUnknownRequest(request, response, url);
+    }
 }
 
 
