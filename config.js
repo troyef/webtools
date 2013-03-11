@@ -8,4 +8,4 @@ exports.dbuser = "webtools";
 exports.dbpass = "webtools";
 
 
-exports.gApiKey = "AIzaSyBaZU-ydD50TWbs1cD8_1yiO_0tXJEnSC0";
+exports.gApiKey = "[google api key]";
